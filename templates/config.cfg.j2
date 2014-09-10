@@ -45,17 +45,18 @@ nginx_status_url: {{ sd.nginx_status_url | default('') }}
 # RabbitMQ
 # See https://support.serverdensity.com/hc/en-us/articles/201090646-RabbitMQ-monitoring-Linux-Mac-and-FreeBSD
 # for rabbit <= 1.x use this url:
-rabbitmq_status_url: {{ sd.rabbitmq_status_url | default('http://localhost:55672/api/overview') }}
+rabbitmq_status_url: {{ sd.rabbitmq_status_url | default('http://localhost:15672/api/overview') }}
 rabbitmq_user: {{ sd.rabbitmq_user | default('guest') }}
 rabbitmq_pass: {{ sd.rabbitmq_pass | default('guest') }}
 
 # Temporary file location
 # See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
-tmp_directory: {{ sd.tmpdir | default('/tmp/sd-agent') }}
+# This is really the log directory
+#tmp_directory: {{ sd.tmpdir | default('/var/log/sd-agent') }}
 
 # Pid file location
 # See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
-pidfile_directory: {{ sd.rundir | default('/run') }}
+#pidfile_directory: {{ sd.rundir | default('/run') }}
 
 # Set log level
 # See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
