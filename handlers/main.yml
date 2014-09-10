@@ -2,3 +2,7 @@
 # handlers file for infowolfe.sd-agent
 - name: restart sd-agent
   service: name=sd-agent state=restarted
+  notify: update-rc.d sd-agent
+
+- name: update-rc.d sd-agent
+  command: update-rc.d sd-agent defaults

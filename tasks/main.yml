@@ -12,6 +12,11 @@
 - name: install sd-agent
   apt: pkg=sd-agent state=installed
 
+- name: grep agent_key
+  command: grep '^agent_key. [0-9a-f]' /etc/sd-agent/config.cfg
+  register: grep_agent_key
+  ignore_errors: yes
+
 - set_fact: uri_post="group={{ sd_group }}&name={{ sd_name |default(ansible_nodename) }}"
   when: sd_group is defined
 
@@ -25,12 +30,24 @@
        status_code=200
        return_content=yes
   register: uri_agent_key
+  when: grep_agent_key|failed
 
 - set_fact: sd_agent_key="{{ uri_agent_key.json.agentKey }}"
+  when: grep_agent_key|failed
 
 - file: path=/root/sd_agent_key.txt state=touch mode=0644
 - lineinfile: dest=/root/sd_agent_key.txt line="{{ sd_agent_key }}"
+  when: grep_agent_key|failed
 
 - name: install sd-agent config.cfg
   template: src=config.cfg.j2 dest=/etc/sd-agent/config.cfg owner=sd-agent group=sd-agent mode=0640 backup=yes
-  notify: restart sd-agent
+  notify:
+    - restart sd-agent
+    - update-rc.d sd-agent
+  when: grep_agent_key|failed
+
+- name: /bin/true notify
+  command: /bin/true
+  notify:
+    - restart sd-agent
+    - update-rc.d sd-agent
