@@ -1,0 +1,63 @@
+#
+# Server Density Agent Config
+# Docs: https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variablesvariables/
+#
+
+[Main]
+sd_url: {{ sd_url |mandatory }}
+agent_key: {{ sd_agent_key |mandatory }}
+
+#
+# Plugins
+#
+# Leave blank to ignore. See https://support.serverdensity.com/hc/en-us/articles/201012088-Writing-a-plugin-Linux-Mac-and-FreeBSD
+plugin_directory: {{ sd.plugin_dir | default('') }}
+
+#
+# Optional status monitoring
+#
+# See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
+# Ignore these if you do not wish to monitor them
+
+# Apache
+# See https://support.serverdensity.com/hc/en-us/articles/201253343-Apache-monitoring-Linux-Mac-and-FreeBSD
+apache_status_url: {{ sd.apache_status_url | default('') }}
+apache_status_user: {{ sd.apache_user | default('') }}
+apache_status_pass: {{ sd.apache_pass | default('') }}
+
+# MongoDB
+# See https://support.serverdensity.com/hc/en-us/articles/201011838-MongoDB-monitoring-Linux-Mac-and-FreeBSD
+mongodb_server: {{ sd.mongodb_server | default('') }}
+mongodb_dbstats: {{ sd.mongodb_dbstats | default('no') }}
+mongodb_replset: {{ sd.mongodb_replset | default('no') }}
+
+# MySQL
+# See https://support.serverdensity.com/hc/en-us/articles/201013827-MySQL-monitoring-Linux-Mac-and-FreeBSD
+# and https://support.serverdensity.com/hc/en-us/articles/201179067-MySQL-replication-monitoring
+mysql_server: {{ sd.mysql_server | default('') }}
+mysql_user: {{ sd.mysql_user | default('') }}
+mysql_pass: {{ sd.mysql_pass | default('') }}
+
+# nginx
+# See http://www.serverdensity.com/docs/agent/nginx/
+nginx_status_url: {{ sd.nginx_status_url | default('') }}
+
+# RabbitMQ
+# See https://support.serverdensity.com/hc/en-us/articles/201090646-RabbitMQ-monitoring-Linux-Mac-and-FreeBSD
+# for rabbit <= 1.x use this url:
+rabbitmq_status_url: {{ sd.rabbitmq_status_url | default('http://localhost:55672/api/overview') }}
+rabbitmq_user: {{ sd.rabbitmq_user | default('guest') }}
+rabbitmq_pass: {{ sd.rabbitmq_pass | default('guest') }}
+
+# Temporary file location
+# See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
+tmp_directory: {{ sd.tmpdir | default('/tmp/sd-agent') }}
+
+# Pid file location
+# See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
+pidfile_directory: {{ sd.rundir | default('/run') }}
+
+# Set log level
+# See https://support.serverdensity.com/hc/en-us/articles/201003178-Agent-config-variables/
+# debug, info, error, warn, warning, critical, fatal
+logging_level: {{ sd.loglevel | default('error') }}

@@ -1,0 +1,36 @@
+---
+# tasks file for infowolfe.sd-agent
+
+- apt: name=python-httplib2 state=present
+
+- name: add SD repo key
+  apt_key: url=https://www.serverdensity.com/downloads/boxedice-public.key state=present
+
+- name: add sd-agent repo
+  apt_repository: repo="deb http://www.serverdensity.com/downloads/linux/deb all main" state=present update_cache=yes
+
+- name: install sd-agent
+  apt: pkg=sd-agent state=installed
+
+- set_fact: uri_post="group={{ sd_group }}&name={{ sd_name |default(ansible_nodename) }}"
+  when: sd_group is defined
+
+- set_fact: uri_post="name={{ sd_name |default(ansible_nodename) }}"
+  when: sd_group is not defined
+
+- name: acquire agent token
+  uri: url="https://api.serverdensity.io/inventory/devices/?token={{ sd_api_token }}"
+       HEADER_Content-Type="application/x-www-form-urlencoded"
+       method=POST body="{{ uri_post }}"
+       status_code=200
+       return_content=yes
+  register: uri_agent_key
+
+- set_fact: sd_agent_key="{{ uri_agent_key.json.agentKey }}"
+
+- file: path=/root/sd_agent_key.txt state=touch mode=0644
+- lineinfile: dest=/root/sd_agent_key.txt line="{{ sd_agent_key }}"
+
+- name: install sd-agent config.cfg
+  template: src=config.cfg.j2 dest=/etc/sd-agent/config.cfg owner=sd-agent group=sd-agent mode=0640 backup=yes
+  notify: restart sd-agent

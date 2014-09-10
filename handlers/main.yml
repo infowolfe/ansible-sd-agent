@@ -1,0 +1,4 @@
+---
+# handlers file for infowolfe.sd-agent
+- name: restart sd-agent
+  service: name=sd-agent state=restarted

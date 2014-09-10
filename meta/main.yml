@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: 'Allen "Chip" Parker'
+  description: "ServerDensity python agent install"
+  company: "Enthought, Inc"
+  license: "BSD"
+  min_ansible_version: 1.5
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  categories:
+  - cloud
+  - cloud:ec2
+  - cloud:gce
+  - cloud:rax
+  - clustering
+  - monitoring
+  - system
+dependencies: []
